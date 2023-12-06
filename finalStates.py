@@ -26,8 +26,8 @@ def estados_finales_posibles(n,nFinal=None):
             
     return subconjuntos_ordenados
 
-# Ejemplo de uso para un autómata de 3 estados
-n = 4
-estados_finales = estados_finales_posibles(n,n-1)
-for estado in estados_finales:
-    print(estado)
+# # Ejemplo de uso para un autómata de 3 estados
+# n = 4
+# estados_finales = estados_finales_posibles(n,n-1)
+# for estado in estados_finales:
+#     print(estado)
