@@ -8,6 +8,7 @@ import stateNum
 import numpy
 import math
 import finalStates
+import biyeccion
 
 def generateDfa(dfaNumber,alphabetSize):
     dataBase = stateNum.determine_number_of_states(dfaNumber,alphabetSize)
@@ -20,16 +21,16 @@ def generateDfa(dfaNumber,alphabetSize):
     print(f"Cota inferior {cotaInf} Cota superior: {cotaSup} ")
     print(dataBase)
 
-    for i in (range(stateAmount+1)):
-        print(i,math.comb(stateAmount,i))
+    # for i in (range(stateAmount+1)):
+    #     print(i,math.comb(stateAmount,i))
 
     a = stateNum.determine_amount_of_dfas_without_final(stateAmount,alphabetSize)
     rangenum = a
     cumSum = dataBase[2] + 1
     print(a)
 
-    for i in (range(stateAmount+1)):
-        print(f"Amount of states with {stateAmount} states and {i} final states ",math.comb(stateAmount,i)*stateNum.determine_amount_of_dfas_without_final(stateAmount,alphabetSize))
+    # for i in (range(stateAmount+1)):
+    #     print(f"Amount of states with {stateAmount} states and {i} final states ",math.comb(stateAmount,i)*stateNum.determine_amount_of_dfas_without_final(stateAmount,alphabetSize))
 
     #Creo los rangos de los estados finales posibles
     for i in range(stateAmount+1):
@@ -102,7 +103,11 @@ def generateDfa(dfaNumber,alphabetSize):
     AWANTE CERROOOOO POR FIN KRAJOOOO
     """
     print("Index: ",indexForFinalState)
-    finalStateSet = finalStates.estados_finales_posibles(stateAmount,finalStateAmount)[indexForFinalState]
+    #Bugfix ni idea porque pasa
+    if stateAmount == finalStateAmount:
+        finalStateSet = finalStates.estados_finales_posibles(stateAmount,finalStateAmount)[0]
+    else:
+        finalStateSet = finalStates.estados_finales_posibles(stateAmount,finalStateAmount)[indexForFinalState]
     print(f"El conjunto de estados finales del automata es : {finalStateSet}")
     print(f"El conjunto de estados del automata es: {states}")
     nbaseTransitions =numpy.base_repr(dfaNumberSpec,stateAmount+1)
@@ -111,6 +116,9 @@ def generateDfa(dfaNumber,alphabetSize):
     if len(nbaseTransitions) < (stateAmount)*alphabetSize:
         for i in (range((stateAmount)*alphabetSize-len(nbaseTransitions))):
             transitionsModified = f"0{transitionsModified}"
+    elif len(nbaseTransitions) > (stateAmount)*alphabetSize:
+        for i in (range(len(nbaseTransitions)-(stateAmount)*alphabetSize)):
+            transitionsModified = transitionsModified[1:]
     print(transitionsModified)
     transitions = []
 
@@ -131,7 +139,8 @@ def generateDfa(dfaNumber,alphabetSize):
                 transitions.append(f"∂({i},{j}) = q{int(transitionsModified[transIndex])-1}")
             transIndex += 1
     for i in transitions:
-        print(i)
+        print("trans",i)
+    return True
 # for i in range(1,8888888888888888):
 #     print(f"dfa({i},1)")
 #     try:
@@ -139,3 +148,10 @@ def generateDfa(dfaNumber,alphabetSize):
 #     except:
 #         print(print(f"dfa({i},3) se rompe"))
 #         break
+
+# for i in range(8888888888):
+#     a = biyeccion.g_inv(i)
+#     print(f"dfa({a[0]},{a[1]})")
+#     generateDfa(a[0],a[1])
+generateDfa(1180591620717411303424,3)
+# generateDfa(2097150,3)
