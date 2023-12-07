@@ -4,6 +4,6 @@ El trabajo consiste en la generación enumerada de DFAs(Automatas Finitos Determ
 Este proyecto tambien grafica los DFAs generados, utilizando MermaidJS <br>
 
 # Requerimientos:<br>
-## Ultima version de Node.js
-## MermaidJS
-## Python 3
+* Ultima version de Node.js
+* MermaidJS
+* Python 3
