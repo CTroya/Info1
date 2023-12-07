@@ -2,12 +2,10 @@ import stateNum
 import math
 import finalStates
 import numpy
-diccionario = [
-    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
-    'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3',
-    '4', '5', '6', '7', '8', '9', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')'
-]
+import convert
+import dict
 def generateDfa(dfaNumber,alphabetSize):
+    diccionario = dict.get_unicode_letters(alphabetSize)
     print(f"Generating the dfa number {dfaNumber} with Sigma Size of {alphabetSize}")
     startingValues = stateNum.determine_number_of_states(dfaNumber,alphabetSize)
     Qlen = startingValues[0]
@@ -37,21 +35,24 @@ def generateDfa(dfaNumber,alphabetSize):
             print(f"{dfaNumber} in between {botInd} and {topInd}")
             print(f"Therefore the final state index is {i}")
             fStateIndex = i
+            break #XD
     dfaNumber -= botInd + 1
-    fStates = finalStates.estados_finales_posibles(Qlen,Flen)[fStateIndex]
-    print(f"The states of the DFA are {finalStates.estados_finales_posibles(Qlen,Qlen)[-1]}")
+    fStates = finalStates.estados_finales_tamano_n(Qlen,Flen)[fStateIndex]
+    print(f"The states of the DFA are {finalStates.estados_finales_tamano_n(Qlen,Qlen)[-1]}")
     print(f"The final states are {fStates}")
-    dfaNumber = numpy.base_repr(dfaNumber,Qlen+1)
+    # dfaNumber = numpy.base_repr(dfaNumber,Qlen+1)
+    # print(dfaNumber)
+    dfaNumber = convert.int_to_base(dfaNumber,Qlen+1)
     dfaNumber = dfaNumber.zfill(Qlen*alphabetSize)
-    print(dfaNumber)
+    # print(dfaNumber)
     count = 0
     for i in range(Qlen):
         for j in range(alphabetSize):
             if dfaNumber[count%len(dfaNumber)] == '0':
-                print(f"∂(q{i},{diccionario[j]}) = ind")
+                print(f"∂(q{i},{diccionario[j]}) = ⟂")
             else:
                 #print(dfaNumber[count%len(dfaNumber)])
-                print(f"∂(q{i},{diccionario[j]}) = q{int(dfaNumber[count%len(dfaNumber)])-1}")
+                print(f"∂(q{i},{diccionario[j]}) = q{int(dfaNumber[count%len(dfaNumber)],base=Qlen+1)-1}")
             count += 1
 if "__main__" == __name__:
-    generateDfa(2933,3)
+    generateDfa(999999999999999999999999999999999999999999999999999,100)

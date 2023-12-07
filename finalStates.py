@@ -24,3 +24,9 @@ def estados_finales_posibles(n,nFinal=None):
                 ret.append(i)
         return ret     
     return subconjuntos_ordenados
+def estados_finales_tamano_n(n, n_final):
+    """Genera los estados finales posibles de tamaño n_final para un autómata de n estados."""
+    estados = ['q' + str(i) for i in range(n)]
+    # Generar solo los subconjuntos de tamaño n_final
+    subconjuntos = combinations(estados, n_final)
+    return [list(subconjunto) for subconjunto in subconjuntos]
