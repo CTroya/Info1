@@ -6,10 +6,8 @@ def f_inv(n):
     w, z = g_inv(n)
     x, y = g_inv(w)
     return (x, y, z)
-
 def g(x, y):
     return (x + y) * (x + y + 1) / 2 + y
-
 def g_inv(n):
     m = math.floor(math.sqrt(2 * n))
     while True:
