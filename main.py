@@ -4,6 +4,7 @@ import finalStates
 import numpy
 import convert
 import dict
+import dfaMermaid
 def generateDfa(dfaNumber,alphabetSize):
     diccionario = dict.get_unicode_letters(alphabetSize)
     print(f"Generating the dfa number {dfaNumber} with Sigma Size of {alphabetSize}")
@@ -38,7 +39,8 @@ def generateDfa(dfaNumber,alphabetSize):
             break #XD
     dfaNumber -= botInd + 1
     fStates = finalStates.estados_finales_tamano_n(Qlen,Flen)[fStateIndex]
-    print(f"The states of the DFA are {finalStates.estados_finales_tamano_n(Qlen,Qlen)[-1]}")
+    allStates = finalStates.estados_finales_tamano_n(Qlen,Qlen)[-1]
+    print(f"The states of the DFA are {allStates}")
     print(f"The final states are {fStates}")
     # dfaNumber = numpy.base_repr(dfaNumber,Qlen+1)
     # print(dfaNumber)
@@ -46,13 +48,21 @@ def generateDfa(dfaNumber,alphabetSize):
     dfaNumber = dfaNumber.zfill(Qlen*alphabetSize)
     # print(dfaNumber)
     count = 0
+    transitions = []
     for i in range(Qlen):
         for j in range(alphabetSize):
             if dfaNumber[count%len(dfaNumber)] == '0':
                 print(f"∂(q{i},{diccionario[j]}) = ⟂")
+                #transitions.append([f"q{i}",diccionario[j],'ind'])
             else:
                 #print(dfaNumber[count%len(dfaNumber)])
                 print(f"∂(q{i},{diccionario[j]}) = q{int(dfaNumber[count%len(dfaNumber)],base=Qlen+1)-1}")
+                transitions.append([f"q{i}",diccionario[j],f"q{int(dfaNumber[count%len(dfaNumber)],base=Qlen+1)-1}"])
             count += 1
+    return [fStates,transitions,allStates]
 if "__main__" == __name__:
-    generateDfa(999999999999999999999999999999999999999999999999999,100)
+    dfaN = int(input("Inserte el numero del dfa:"))
+    alphSize = int(input("Inserte el tamaño del alfabeto:"))
+    dfa = generateDfa(dfaN,alphSize)
+    dfaMermaid.write_to_file(f"generatedDFAGraphs/dfa{dfaN}Sigma{alphSize}.html",dfaMermaid.createMermaidFile(dfaN,dfa[0],dfa[1],dfa[2]))
+    print(f"Graph for the file can be found in",f"generatedDFAGraphs/dfa{dfaN}Sigma{alphSize}.html")
