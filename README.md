@@ -7,3 +7,5 @@ Este proyecto tambien grafica los DFAs generados, utilizando MermaidJS <br>
 * Ultima version de Node.js
 * MermaidJS
 * Python 3
+# Graficación de DFA
+Al generar el DFA correspondiente, se genera un archivo html en la carpeta /generatedDFAGraphs con el nombre correspondiente al numero del DFA y el tamaño de Sigma correspondiente.
