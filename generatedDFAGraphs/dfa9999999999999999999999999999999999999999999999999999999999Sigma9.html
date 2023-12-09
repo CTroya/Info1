@@ -1,0 +1,78 @@
+<script type="module"> 
+ import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs'; 
+ mermaid.initialize({startOnLoad: true});
+</script>
+<body>
+Here is the dfa 9999999999999999999999999999999999999999999999999999999999
+<pre class="mermaid">
+   graph LR
+  classDef state font-style:italic,font-weight:bold,fill:yellow
+  classDef finalState font-style:italic,font-weight:bold,fill:green
+ q0:::finalState
+ q5:::finalState
+ q1((q1)):::state
+ q2((q2)):::state
+ q3((q3)):::state
+ q4((q4)):::state
+ q6((q6)):::state
+  0(( ))
+ 0-->q0((q0))
+ q0--A-->q4((q4))
+ q0--B-->q6((q6))
+ q0--C-->q4((q4))
+ q0--D-->q1((q1))
+ q0--E-->q2((q2))
+ q0--F-->q2((q2))
+ q0--G-->q6((q6))
+ q0--I-->q5((q5))
+ q1--A-->q2((q2))
+ q1--B-->q1((q1))
+ q1--C-->q1((q1))
+ q1--D-->q5((q5))
+ q1--E-->q2((q2))
+ q1--F-->q4((q4))
+ q1--H-->q4((q4))
+ q1--I-->q0((q0))
+ q2--A-->q5((q5))
+ q2--B-->q2((q2))
+ q2--C-->q0((q0))
+ q2--D-->q3((q3))
+ q2--E-->q0((q0))
+ q2--F-->q1((q1))
+ q2--G-->q3((q3))
+ q2--H-->q4((q4))
+ q2--I-->q2((q2))
+ q3--A-->q3((q3))
+ q3--B-->q3((q3))
+ q3--C-->q0((q0))
+ q3--D-->q3((q3))
+ q3--E-->q4((q4))
+ q3--F-->q2((q2))
+ q3--G-->q0((q0))
+ q3--H-->q4((q4))
+ q3--I-->q2((q2))
+ q4--A-->q5((q5))
+ q4--B-->q6((q6))
+ q4--C-->q1((q1))
+ q4--D-->q6((q6))
+ q4--E-->q4((q4))
+ q4--F-->q5((q5))
+ q4--G-->q1((q1))
+ q4--H-->q4((q4))
+ q5--B-->q5((q5))
+ q5--C-->q0((q0))
+ q5--D-->q4((q4))
+ q5--E-->q6((q6))
+ q5--G-->q3((q3))
+ q5--H-->q1((q1))
+ q5--I-->q3((q3))
+ q6--A-->q6((q6))
+ q6--B-->q5((q5))
+ q6--D-->q5((q5))
+ q6--E-->q0((q0))
+ q6--F-->q0((q0))
+ q6--G-->q5((q5))
+ q6--H-->q0((q0))
+ q6--I-->q1((q1))
+   </pre>
+</body>
