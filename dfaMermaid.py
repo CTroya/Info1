@@ -11,13 +11,13 @@ def write_to_file(file_path, text):
 
 
 def createMermaidFile(dfaNumber,finalStates,transitions,states):
-    Header = f"<script type=\"module\"> \n import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs'; \n mermaid.initialize({'{startOnLoad: true}'});\n</script>\n<body>\nHere is the dfa {dfaNumber}\n<pre class=\"mermaid\">\n   graph LR\n  classDef state font-style:italic,font-weight:bold,fill:yellow\n  classDef finalState font-style:italic,font-weight:bold,fill:green"
+    Header = f"<script type=\"module\"> \n import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs'; \n mermaid.initialize({'{startOnLoad: true,theme: neutral}'});\n</script>\n<body style=\"background-color: rgb(0, 0, 0);color: rgb(202, 132, 2)\">\nHere is the dfa {dfaNumber}\n<pre class=\"mermaid\">\n   graph LR\n  classDef state font-style:italic,font-weight:bold,fill:yellow\n  classDef finalState font-style:italic,font-weight:bold,fill:green"
     for i in finalStates:
         Header = f"{Header}\n {i}:::finalState"
     for i in (list(set(states)-set(finalStates))):
         Header = f"{Header}\n {i}(({i})):::state"
     Header = f"{Header}\n  0(( ))\n 0-->q0((q0))"
     for i in transitions:
-        Header = f"{Header}\n {i[0]}--{i[1]}-->{i[2]}(({i[2]}))"
+        Header = f"{Header}\n {i[0]}--\'{i[1]}\'-->{i[2]}(({i[2]}))"
     Header =f"{Header}\n   </pre>\n</body>"
     return Header
