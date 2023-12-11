@@ -6,6 +6,9 @@ import convert
 import dict
 import dfaMermaid
 import os
+import json
+import jsonify
+
 def generateDfa(dfaNumber,alphabetSize):
     diccionario = dict.get_unicode_letters(alphabetSize)
     print(f"Generating the dfa number {dfaNumber} with Sigma Size of {alphabetSize}")
@@ -15,6 +18,7 @@ def generateDfa(dfaNumber,alphabetSize):
     topInd = 0
     botInd = None
     Flen = None
+    print(startingValues)
     dfaNumber -= startingValues[2]
     for i in (range(Qlen+1)):
         topInd += math.comb(Qlen,i)*(Qlen+1)**(alphabetSize*Qlen)
@@ -63,9 +67,13 @@ def generateDfa(dfaNumber,alphabetSize):
     return [fStates,transitions,allStates]
 if "__main__" == __name__:
     dfaN = int(input("Inserte el numero del dfa:"))
-    alphSize = int(input("Inserte el tamaño del alfabeto:"))
+    alphSize = 3
     dfa = generateDfa(dfaN,alphSize)
     if os.path.exists("generatedDFAGraphs") != True:
         os.makedirs("generatedDFAGraphs")
+    if os.path.exists("jsonDfa")!= True:
+        os.makedirs("jsonDfa")
     dfaMermaid.write_to_file(f"generatedDFAGraphs/dfa{dfaN}Sigma{alphSize}.html",dfaMermaid.createMermaidFile(dfaN,dfa[0],dfa[1],dfa[2]))
+    dfaJson = jsonify.DFA(dfa[1],dfa[2],dfa[0])
+    dfaMermaid.write_to_file(f"jsonDfa/dfa{dfaN}Sigma{alphSize}.json",json.dumps(dfaJson.to_dict()))
     print(f"Graph for the file can be found in",f"generatedDFAGraphs/dfa{dfaN}Sigma{alphSize}.html")
