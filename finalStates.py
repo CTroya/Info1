@@ -22,7 +22,7 @@ def estados_finales_posibles(n,nFinal=None):
         for i in subconjuntos_ordenados:
             if len(i) >= nFinal:
                 ret.append(i)
-        return ret     
+        return ret
     return subconjuntos_ordenados
 def estados_finales_tamano_n(n, n_final):
     """Genera los estados finales posibles de tamaño n_final para un autómata de n estados."""
