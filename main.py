@@ -1,3 +1,186 @@
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+import dfaMermaid
+import os
+
+app = FastAPI()
+
+# Mount static directory to serve generated DFA graphs
+app.mount("/static", StaticFiles(directory="generatedDFAGraphs"), name="static")
+
+@app.get("/", response_class=HTMLResponse)
+async def read_root():
+    html_content = f"""
+    <html>
+        <head>
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+            <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs"></script>
+            <script>
+                mermaid.initialize(\u007b startOnLoad: true, theme: 'neutral' \u007d);
+            </script>
+            <style>
+                body \u007b
+                    background-color: #1e1e1e;
+                    color: #c98f20;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding-top: 40px;
+                    font-family: 'Roboto', sans-serif;
+                    margin: 0;
+                \u007d
+                h1 \u007b
+                    font-size: 2.5em;
+                    margin-bottom: 20px;
+                    color: #ffa500;
+                \u007d
+                a \u007b
+                    text-decoration: none;
+                    color: #c98f20;
+                    font-weight: bold;
+                    margin-top: 20px;
+                    padding: 10px 20px;
+                    border: 2px solid #c98f20;
+                    border-radius: 8px;
+                    transition: all 0.3s ease;
+                \u007d
+                a:hover \u007b
+                    background-color: #c98f20;
+                    color: #1e1e1e;
+                \u007d
+                .content-container \u007b
+                    background-color: #2e2e2e;
+                    padding: 30px;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+                    max-width: 90%;
+                    overflow-x: auto;
+                \u007d
+                form \u007b
+                    background-color: #2e2e2e;
+                    padding: 20px;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+                    max-width: 400px;
+                    margin-top: 20px;
+                    color: #c98f20;
+                    text-align: center;
+                \u007d
+                label, input \u007b
+                    display: block;
+                    margin-bottom: 10px;
+                    font-size: 1.2em;
+                \u007d
+                input[type="number"] \u007b
+                    padding: 10px;
+                    border: 2px solid #c98f20;
+                    border-radius: 5px;
+                    background-color: #1e1e1e;
+                    color: #ffa500;
+                \u007d
+                button[type="submit"] \u007b
+                    background-color: #c98f20;
+                    color: #1e1e1e;
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 8px;
+                    font-size: 1.2em;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                \u007d
+                button[type="submit"]:hover \u007b
+                    background-color: #ffa500;
+                    color: #1e1e1e;
+                \u007d
+            </style>
+        </head>
+        <body>
+            <h1>Generador de DFAs por enumeración</h1>
+            <div class="content-container">
+                Hecho por Carlos Troya
+            </div>
+            <form action="/generate" method="post">
+                <label for="dfaNumber">DFA Number:</label>
+                <input type="number" id="dfaNumber" name="dfaNumber" required>
+                <label for="alphabetSize">Alphabet Size:</label>
+                <input type="number" id="alphabetSize" name="alphabetSize" required>
+                <button type="submit">Generate DFA</button>
+            </form>
+        </body>
+    </html>
+    """
+    return HTMLResponse(content=html_content)
+
+@app.post("/generate", response_class=HTMLResponse)
+async def generate_dfa(request: Request):
+    form_data = await request.form()
+    dfaNumber = int(form_data["dfaNumber"])
+    alphabetSize = int(form_data["alphabetSize"])
+
+    # Generate DFA using the provided inputs
+    dfa = generateDfa(dfaNumber, alphabetSize)
+    div_content = dfaMermaid.createMermaidDiv(dfaNumber, dfa[0], dfa[1], dfa[2])
+
+    html_content = f"""
+    <html>
+        <head>
+            <link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap\">
+            <script type=\"module\" src=\"https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs\"></script>
+            <script>
+                mermaid.initialize(\u007b startOnLoad: true, theme: 'neutral' \u007d);
+            </script>
+            <style>
+                body \u007b
+                    background-color: #1e1e1e;
+                    color: #c98f20;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding-top: 40px;
+                    font-family: 'Roboto', sans-serif;
+                    margin: 0;
+                \u007d
+                h1 \u007b
+                    font-size: 2.5em;
+                    margin-bottom: 20px;
+                    color: #ffa500;
+                \u007d
+                a \u007b
+                    text-decoration: none;
+                    color: #c98f20;
+                    font-weight: bold;
+                    margin-top: 20px;
+                    padding: 10px 20px;
+                    border: 2px solid #c98f20;
+                    border-radius: 8px;
+                    transition: all 0.3s ease;
+                \u007d
+                a:hover \u007b
+                    background-color: #c98f20;
+                    color: #1e1e1e;
+                \u007d
+                .content-container \u007b
+                    background-color: #2e2e2e;
+                    padding: 30px;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+                    max-width: 90%;
+                    overflow-x: auto;
+                \u007d
+            </style>
+        </head>
+        <body>
+            <h1>DFA Visualizer</h1>
+            <div class=\"content-container\">
+                {div_content}
+            </div>
+            <a href=\"/\">Back to Home</a>
+        </body>
+    </html>
+    """
+    return HTMLResponse(content=html_content)
+
 import stateNum
 import math
 import finalStates
@@ -65,15 +248,17 @@ def generateDfa(dfaNumber,alphabetSize):
                 transitions.append([f"q{i}",diccionario[j],f"q{int(dfaNumber[count%len(dfaNumber)],base=Qlen+1)-1}"])
             count += 1
     return [fStates,transitions,allStates]
-if "__main__" == __name__:
-    dfaN = int(input("Inserte el numero del dfa:"))
-    alphSize = 3
-    dfa = generateDfa(dfaN,alphSize)
-    if os.path.exists("generatedDFAGraphs") != True:
-        os.makedirs("generatedDFAGraphs")
-    if os.path.exists("jsonDfa")!= True:
-        os.makedirs("jsonDfa")
-    dfaMermaid.write_to_file(f"generatedDFAGraphs/dfa{dfaN}Sigma{alphSize}.html",dfaMermaid.createMermaidFile(dfaN,dfa[0],dfa[1],dfa[2]))
-    dfaJson = jsonify.DFA(dfa[1],dfa[2],dfa[0])
-    dfaMermaid.write_to_file(f"jsonDfa/dfa{dfaN}Sigma{alphSize}.json",json.dumps(dfaJson.to_dict()))
-    print(f"Graph for the file can be found in",f"generatedDFAGraphs/dfa{dfaN}Sigma{alphSize}.html")
+
+# if "__main__" == __name__:
+#     dfaN = int(input("Inserte el numero del dfa:"))
+#     alphSize = int(input("Inserte el tamaño del alfabeto"))
+#     dfa = generateDfa(dfaN,alphSize)
+#     if os.path.exists("generatedDFAGraphs") != True:
+#         os.makedirs("generatedDFAGraphs")
+#     if os.path.exists("jsonDfa")!= True:
+#         os.makedirs("jsonDfa")
+#     dfaMermaid.write_to_file(f"generatedDFAGraphs/dfa{dfaN}Sigma{alphSize}.html",dfaMermaid.createMermaidFile(dfaN,dfa[0],dfa[1],dfa[2]))
+#     dfaJson = jsonify.DFA(dfa[1],dfa[2],dfa[0])
+#     print(dfaJson)
+#     dfaMermaid.write_to_file(f"jsonDfa/dfa{dfaN}Sigma{alphSize}.json",json.dumps(dfaJson.to_dict()))
+#     print(f"Graph for the file can be found in",f"generatedDFAGraphs/dfa{dfaN}Sigma{alphSize}.html")
