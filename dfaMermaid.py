@@ -24,14 +24,19 @@ def createMermaidFile(dfaNumber,finalStates,transitions,states):
 def createMermaidDiv(dfaNumber, finalStates, transitions, states):
     """
     This function creates a Mermaid diagram div element without including the full HTML structure.
-
+    
     :param dfaNumber: The number of the DFA being represented.
     :param finalStates: A list of final states in the DFA.
     :param transitions: A list of transitions in the form of tuples (from_state, input, to_state).
     :param states: A list of all states in the DFA.
     :return: A string representing the div containing the Mermaid diagram.
     """
-    div_content = f"<pre class=\"mermaid\">\n   graph LR\n  classDef state font-style:italic,font-weight:bold,fill:yellow\n  classDef finalState font-style:italic,font-weight:bold,fill:green"
+    div_content = (
+        f"<pre class=\"mermaid\" style=\"transform: scale(3); transform-origin: top left;\">\n"
+        "   graph LR\n"
+        "   classDef state font-style:italic,font-weight:bold,fill:yellow\n"
+        "   classDef finalState font-style:italic,font-weight:bold,fill:green"
+    )
     
     for i in finalStates:
         div_content = f"{div_content}\n {i}:::finalState"
@@ -41,7 +46,7 @@ def createMermaidDiv(dfaNumber, finalStates, transitions, states):
     div_content = f"{div_content}\n  0(( ))\n 0-->q0((q0))"
     
     for i in transitions:
-        div_content = f"{div_content}\n {i[0]}--\'{i[1]}\'-->{i[2]}(({i[2]}))"
+        div_content = f"{div_content}\n {i[0]}--'{i[1]}'-->{i[2]}(({i[2]}))"
     
     div_content = f"{div_content}\n   </pre>"
     return div_content

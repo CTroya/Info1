@@ -123,61 +123,71 @@ async def generate_dfa(request: Request):
     div_content = dfaMermaid.createMermaidDiv(dfaNumber, dfa[0], dfa[1], dfa[2])
 
     html_content = f"""
-    <html>
-        <head>
-            <link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap\">
-            <script type=\"module\" src=\"https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs\"></script>
-            <script>
-                mermaid.initialize(\u007b startOnLoad: true, theme: 'neutral' \u007d);
-            </script>
-            <style>
-                body \u007b
-                    background-color: #1e1e1e;
-                    color: #c98f20;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    padding-top: 40px;
-                    font-family: 'Roboto', sans-serif;
-                    margin: 0;
-                \u007d
-                h1 \u007b
-                    font-size: 2.5em;
-                    margin-bottom: 20px;
-                    color: #ffa500;
-                \u007d
-                a \u007b
-                    text-decoration: none;
-                    color: #c98f20;
-                    font-weight: bold;
-                    margin-top: 20px;
-                    padding: 10px 20px;
-                    border: 2px solid #c98f20;
-                    border-radius: 8px;
-                    transition: all 0.3s ease;
-                \u007d
-                a:hover \u007b
-                    background-color: #c98f20;
-                    color: #1e1e1e;
-                \u007d
-                .content-container \u007b
-                    background-color: #2e2e2e;
-                    padding: 30px;
-                    border-radius: 10px;
-                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-                    max-width: 90%;
-                    overflow-x: auto;
-                \u007d
-            </style>
-        </head>
-        <body>
-            <h1>DFA Visualizer</h1>
-            <div class=\"content-container\">
-                {div_content}
-            </div>
-            <a href=\"/\">Back to Home</a>
-        </body>
-    </html>
+<html>
+    <head>
+        <link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap\">
+        <script type=\"module\" src=\"https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs\"></script>
+        <script>
+            mermaid.initialize(\u007b startOnLoad: true, theme: 'neutral' \u007d);
+        </script>
+        <style>
+            body \u007b
+                background-color: #1e1e1e;
+                color: #c98f20;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding-top: 40px;
+                font-family: 'Roboto', sans-serif;
+                margin: 0;
+                position: relative;
+            \u007d
+            h1 \u007b
+                font-size: 2.5em;
+                margin-bottom: 20px;
+                color: #ffa500;
+                display: flex;
+                align-items: center;
+            \u007d
+            a \u007b
+                text-decoration: none;
+                color: #c98f20;
+                font-weight: bold;
+                padding: 2px 5px;
+                border: 1px solid #c98f20;
+                border-radius: 3px;
+                transition: all 0.3s ease;
+                font-size: 0.9em;
+                position: absolute;
+                top: 20px;
+                right: 20px;
+            \u007d
+            a:hover \u007b
+                background-color: #c98f20;
+                color: #1e1e1e;
+            \u007d
+            .content-container \u007b
+                background-color: #2e2e2e;
+                padding: 50px;
+                border-radius: 15px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+                width: auto;
+                height: auto;
+                max-width: 100%;
+                max-height: 100%;
+                overflow-x: auto;
+                display: inline-block;
+            \u007d
+        </style>
+    </head>
+    <body>
+        <h1>Visualizacion del DFA</h1>
+        <a href=\"/\">Back to Home</a>
+
+            {div_content}
+
+    </body>
+</html>
     """
     return HTMLResponse(content=html_content)
 
